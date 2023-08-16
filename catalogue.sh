@@ -1,9 +1,7 @@
 cp catalogue.service /etc/systemd/system/catalogue.service
-
 cp mongo.repo /etc/yum.repos.d/mongo.repo
 
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash
-
 yum install nodejs -y
 useradd roboshop
 mkdir /app
@@ -16,9 +14,6 @@ npm install
 yum install mongodb-org-shell -y
 mongo --host mongodb.devops999.store </app/schema/catalogue.js
 
-yum install mongodb-org-shell -y
-
 systemctl daemon-reload
-
 systemctl enable catalogue
 systemctl restart catalogue
