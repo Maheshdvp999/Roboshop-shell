@@ -1,5 +1,5 @@
-component=user
-schema_setup=true
+component=cart
+schema_type= mongodb
 source common.sh
 
 nodejs
