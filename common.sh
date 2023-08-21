@@ -39,10 +39,7 @@ func_nodejs () {
   npm install &>>${log}
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
 
-  yum install mongodb-org-shell -y &>>${log}
-  echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
-  mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
-  echo -e "\e[36m>>>>>>>Start user service <<<<<<<<<<\e[0m"
+  func_schema_setup
   func_systemd
 }
 
@@ -54,11 +51,7 @@ func_java () {
   echo -e "\e[36m>>>>>>>Build ${component} service <<<<<<<<<<\e[0m"
   mvn clean package &>>${log}
   mv target/${component}-1.0.jar ${component}.jar &>>${log}
-  echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
-  yum install mysql -y &>>${log}
-  echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
-
-  mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
+  func_schema_setup
   func_systemd
 }
 
@@ -71,4 +64,20 @@ func_python () {
 
   pip3.6 install -r requirements.txt &>>${log}
   func_systemd
+}
+func_schema_setup () {
+ if [$schema_type]=mongodb;then
+  yum install mongodb-org-shell -y &>>${log}
+  echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
+  mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
+  echo -e "\e[36m>>>>>>>Start user service <<<<<<<<<<\e[0m"
+ fi
+  if [$schema_type]=mysql;then
+      echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
+      yum install mysql -y &>>${log}
+      echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
+
+      mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
+
+  fi
 }
