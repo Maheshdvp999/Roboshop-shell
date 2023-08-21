@@ -26,7 +26,7 @@ nodejs () {
 
   yum install mongodb-org-shell -y &>>${log}
   echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
-  mongo --host mongodb.devops999.store </app/schema/user.js
+  mongo --host mongodb.devops999.store </app/schema/${component}.js
   echo -e "\e[36m>>>>>>>Start user service <<<<<<<<<<\e[0m"
   systemctl daemon-reload &>>${log}
   systemctl enable ${component} &>>${log}
