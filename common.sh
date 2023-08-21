@@ -1,3 +1,5 @@
+log=/tmp/roboshop.log
+
 func_apppreq() {
   echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
     useradd roboshop &>>${log}
@@ -6,7 +8,7 @@ func_apppreq() {
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
-    curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &&>>${log}
+    curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
 
     cd /app
@@ -19,7 +21,6 @@ func_systemd () {
   systemctl enable ${component} &>>${log}
   systemctl restart ${component} &>>${log}
 }
-
 func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
@@ -38,24 +39,24 @@ func_nodejs () {
 
   yum install mongodb-org-shell -y &>>${log}
   echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
-  mongo --host mongodb.devops999.store </app/schema/${component}.js
+  mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
   echo -e "\e[36m>>>>>>>Start user service <<<<<<<<<<\e[0m"
   func_systemd
 }
 
 func_java () {
   echo -e "\e[36m>>>>>>>Create ${component} service <<<<<<<<<<\e[0m"
-  cp ${component}.service /etc/systemd/system/${component}.service
+  cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
   echo -e "\e[36m>>>>>>>Install Maven <<<<<<<<<<\e[0m"
-  yum install maven -y
+  yum install maven -y &>>${log}
   func_apppreq
   echo -e "\e[36m>>>>>>>Build ${component} service <<<<<<<<<<\e[0m"
-  mvn clean package
-  mv target/${component}-1.0.jar ${component}.jar
+  mvn clean package &>>${log}
+  mv target/${component}-1.0.jar ${component}.jar &>>${log}
   echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
-  yum install mysql -y
+  yum install mysql -y &>>${log}
   echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
 
-  mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql
+  mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
   func_systemd
 }
