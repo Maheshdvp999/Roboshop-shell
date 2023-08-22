@@ -51,7 +51,7 @@ func_nodejs () {
   echo $?
   func_systemd
   echo $?
-}
+ }
 
 func_java () {
 
