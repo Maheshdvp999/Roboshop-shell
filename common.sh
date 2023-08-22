@@ -72,11 +72,11 @@ func_schema_setup () {
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
- if ["${schema_type}" == "mongodb" ]; then
+ if ["${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
 
-  fi
+ fi
 }
