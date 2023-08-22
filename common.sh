@@ -27,28 +27,65 @@ func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
   echo -e "\e[36m>>>>>>>Create  Mongodb Repo<<<<<<<<<<\e[0m"
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
-  echo $?
+if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   echo -e "\e[36m>>>>>>>Install Node js<<<<<<<<<<\e[0m"
   yum install nodejs -y &>>${log}
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   func_apppreq
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   echo -e "\e[36m>>>>>>>Download NodeJs Dependencies<<<<<<<<<<\e[0m"
 
   npm install &>>${log}
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
 
   func_schema_setup
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
   func_systemd
-  echo $?
+  if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
+else 
+  echo -e "\e[31m Failure \e[0m"
+fi
 }
 
 func_java () {
@@ -77,7 +114,9 @@ func_schema_setup () {
  if ["${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
    yum install mongodb-org-shell -y &>>${log}
-   echo $?
+   if [$? -e0]; then
+ 
+ echo -e "\e[32m success \e[0m"
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
