@@ -47,7 +47,7 @@ func_nodejs () {
 
   func_schema_setup
   echo $?
-  func_systemd]
+  func_systemd
   echo $?
 }
 
