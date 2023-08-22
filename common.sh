@@ -67,9 +67,10 @@ func_python () {
 }
 func_schema_setup () {
  if ["${schema_type}" == "mongodb" ]; then
-  yum install mongodb-org-shell -y &>>${log}
-  echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
-  mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
+   echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
+   yum install mongodb-org-shell -y &>>${log}
+   echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
+   mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
  if ["${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
