@@ -80,7 +80,7 @@ else
   echo -e "\e[31m Failure \e[0m"
 fi
   func_systemd
-  if [$? -e0]; then
+if [$? -e0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
