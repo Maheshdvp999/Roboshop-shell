@@ -27,12 +27,15 @@ func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-  if [$? -e0]; then
+if [$? -e0]; then
  
  echo -e "\e[32m success \e[0m"
+else
+  echo -e "\e[31m Failure \e[0m"
+fi
   echo -e "\e[36m>>>>>>>Create  Mongodb Repo<<<<<<<<<<\e[0m"
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
-if [$? -e0]; then
+if [$? -eq0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
@@ -40,23 +43,21 @@ else
 fi
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-  if [$? -e0]; then
- 
+if [$? -eq0]; then
  echo -e "\e[32m success \e[0m"
 else 
   echo -e "\e[31m Failure \e[0m"
 fi
   echo -e "\e[36m>>>>>>>Install Node js<<<<<<<<<<\e[0m"
   yum install nodejs -y &>>${log}
-  if [$? -e0]; then
+  if [$? -eq0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
   echo -e "\e[31m Failure \e[0m"
 fi
   func_apppreq
-  if [$? -e0]; then
- 
+if [$? -eq0]; then
  echo -e "\e[32m success \e[0m"
 else 
   echo -e "\e[31m Failure \e[0m"
@@ -64,7 +65,7 @@ fi
   echo -e "\e[36m>>>>>>>Download NodeJs Dependencies<<<<<<<<<<\e[0m"
 
   npm install &>>${log}
-  if [$? -e0]; then
+if [$? -eq0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
@@ -73,14 +74,14 @@ fi
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
 
   func_schema_setup
-  if [$? -e0]; then
+  if [$? -eq0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
   echo -e "\e[31m Failure \e[0m"
 fi
   func_systemd
-if [$? -e0]; then
+  if [$? -eq0]; then
  
  echo -e "\e[32m success \e[0m"
 else 
