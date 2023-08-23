@@ -43,13 +43,13 @@ func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-  #func_exit_status
+  func_exit_status
 
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
   #func_exit_status
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-  #func_exit_status
+  func_exit_status
   echo -e "\e[36m>>>>>>>Install Node js<<<<<<<<<<\e[0m"
   yum install nodejs -y &>>${log}
   #func_exit_status
