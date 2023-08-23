@@ -6,21 +6,44 @@ func_apppreq() {
     echo $?
     echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
     useradd roboshop &>>${log}
-    echo $?
+    if [ $? -eq 0 ]; then
+          echo -e "\e[32m SUCCESS \e[0m"
+        else
+           echo -e "\e[31m FAILURE \e[0m"
+        fi
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
-    echo $?
+
+    if [ $? -eq 0 ]; then
+      echo -e "\e[32m SUCCESS \e[0m"
+    else
+       echo -e "\e[31m FAILURE \e[0m"
+    fi
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
-    echo $?
+
+    if [ $? -eq 0 ]; then
+          echo -e "\e[32m SUCCESS \e[0m"
+        else
+           echo -e "\e[31m FAILURE \e[0m"
+        fi
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
     curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
+    if [ $? -eq 0 ]; then
+          echo -e "\e[32m SUCCESS \e[0m"
+        else
+           echo -e "\e[31m FAILURE \e[0m"
+        fi
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
 
     cd /app
     unzip /tmp/${component}.zip &>>${log}
     cd /app
-    echo $?
+    if [ $? -eq 0 ]; then
+          echo -e "\e[32m SUCCESS \e[0m"
+        else
+           echo -e "\e[31m FAILURE \e[0m"
+        fi
 
   }
 func_systemd () {
@@ -74,7 +97,11 @@ func_nodejs () {
      echo -e "\e[31m FAILURE \e[0m"
   fi
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
-
+if [ $? -eq 0 ]; then
+      echo -e "\e[32m SUCCESS \e[0m"
+    else
+       echo -e "\e[31m FAILURE \e[0m"
+    fi
   func_schema_setup
 
   func_systemd
@@ -120,6 +147,11 @@ func_schema_setup () {
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
    echo $?
+   if [ $? -eq 0 ]; then
+         echo -e "\e[32m SUCCESS \e[0m"
+       else
+          echo -e "\e[31m FAILURE \e[0m"
+       fi
 
  fi
 }
