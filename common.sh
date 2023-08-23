@@ -12,7 +12,7 @@ func_apppreq() {
     cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
     echo $?
     echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
-    if [ $? -ne 0]; then
+    if [ $? -ne 0 ]; then
       useradd roboshop &>>${log}
     fi
     func_exit_status
