@@ -27,10 +27,7 @@ func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-  if [$? -e0]; then
- 
- echo -e "\e[32m success \e[0m"
-  echo -e "\e[36m>>>>>>>Create  Mongodb Repo<<<<<<<<<<\e[0m"
+
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
   echo $?
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
