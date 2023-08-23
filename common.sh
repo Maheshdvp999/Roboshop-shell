@@ -13,23 +13,23 @@ func_apppreq() {
     echo $?
     echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
     useradd roboshop &>>${log}
-    func_exit_status
+    #func_exit_status
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
-    func_exit_status
+    #func_exit_status
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
 
-    func_exit_status
+    #func_exit_status
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
     curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
-    func_exit_status
+    #func_exit_status
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
 
     cd /app
     unzip /tmp/${component}.zip &>>${log}
     cd /app
-    func_exit_status
+    #func_exit_status
 }
 
 func_systemd () {
@@ -37,7 +37,7 @@ func_systemd () {
   systemctl enable ${component} &>>${log}
   systemctl restart ${component} &>>${log}
   echo $?
-}]
+}
 
 func_nodejs () {
   log=/tmp/roboshop.log
@@ -93,19 +93,19 @@ func_schema_setup () {
  if [ "${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
    yum install mongodb-org-shell -y &>>${log}
-   func_exit_status
+   #func_exit_status
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
-   func_exit_status
+   #func_exit_status
  fi
 
  if [ "${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
-   func_exit_status
+   #func_exit_status
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
-   func_exit_status
+   #func_exit_status
 
  fi
 }
