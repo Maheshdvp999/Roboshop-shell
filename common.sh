@@ -48,9 +48,9 @@ func_nodejs () {
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
 
   func_schema_setup
-  echo $?
+
   func_systemd
-  echo $?
+}
 
 func_java () {
 
@@ -91,3 +91,4 @@ func_schema_setup () {
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
 
  fi
+}
