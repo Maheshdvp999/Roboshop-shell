@@ -91,4 +91,3 @@ func_schema_setup () {
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
 
  fi
-}
