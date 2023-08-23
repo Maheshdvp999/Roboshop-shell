@@ -71,6 +71,7 @@ func_python () {
   pip3.6 install -r requirements.txt &>>${log}
   func_systemd
 }
+
 func_schema_setup () {
  if ["${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
@@ -81,6 +82,7 @@ func_schema_setup () {
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
+
  if ["${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
