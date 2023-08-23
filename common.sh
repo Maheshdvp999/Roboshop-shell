@@ -106,19 +106,10 @@ func_schema_setup () {
  if [ "${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
-   if [ $? -eq 0 ]; then
-     echo -e "\e[32m SUCCESS \e[0m"
-   else
-     echo -e "\e[31m FAILURE \e[0m"
-   fi
+   func_exit_status
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
-   if [ $? -eq 0 ]; then
-     echo -e "\e[32m SUCCESS \e[0m"
-   else
-     echo -e "\e[31m FAILURE \e[0m"
-   fi
-
+   func_exit_status
 
  fi
 }
