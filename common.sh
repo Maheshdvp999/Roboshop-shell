@@ -1,10 +1,20 @@
 log=/tmp/roboshop.log
+func_exit_status() {
+  if [ $? -eq 0 ]; then
+    echo -e "\e[32m SUCCESS \e[0m"
+  else
+    echo -e "\e[31m FAILURE \e[0m"
+  fi  
+}
 
 func_apppreq() {
     echo -e "\e[36m>>>>>>>Create ${component} service <<<<<<<<<<\e[0m"
     cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
     echo $?
     echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
+    id roboshop &>>${log}
+    if [ $? -ne 0]; then
+      useradd roboshop
     useradd roboshop &>>${log}
     if [ $? -eq 0 ]; then
           echo -e "\e[32m SUCCESS \e[0m"
@@ -13,95 +23,51 @@ func_apppreq() {
         fi
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
-
-    if [ $? -eq 0 ]; then
-      echo -e "\e[32m SUCCESS \e[0m"
-    else
-       echo -e "\e[31m FAILURE \e[0m"
-    fi
+  func_exit_status
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
 
-    if [ $? -eq 0 ]; then
-          echo -e "\e[32m SUCCESS \e[0m"
-        else
-           echo -e "\e[31m FAILURE \e[0m"
-        fi
+  func_exit_status
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
     curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
-    if [ $? -eq 0 ]; then
-          echo -e "\e[32m SUCCESS \e[0m"
-        else
-           echo -e "\e[31m FAILURE \e[0m"
-        fi
+  func_exit_status
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
 
     cd /app
     unzip /tmp/${component}.zip &>>${log}
     cd /app
-    if [ $? -eq 0 ]; then
-          echo -e "\e[32m SUCCESS \e[0m"
-        else
-           echo -e "\e[31m FAILURE \e[0m"
-        fi
-
+  func_exit_status
   }
 func_systemd () {
   systemctl daemon-reload &>>${log}
   systemctl enable ${component} &>>${log}
   systemctl restart ${component} &>>${log}
   echo $?
-}
+}]
+
 func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-  if [ $? -eq 0 ]; then
-    echo -e "\e[32m SUCCESS \e[0m"
-  else
-     echo -e "\e[31m FAILURE \e[0m"
-  fi
+func_exit_status
 
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
-    if [ $? -eq 0 ]; then
-      echo -e "\e[32m SUCCESS \e[0m"
-    else
-       echo -e "\e[31m FAILURE \e[0m"
-    fi
+func_exit_status
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-  if [ $? -eq 0 ]; then
-    echo -e "\e[32m SUCCESS \e[0m"
-  else
-     echo -e "\e[31m FAILURE \e[0m"
-  fi
+func_exit_status
   echo -e "\e[36m>>>>>>>Install Node js<<<<<<<<<<\e[0m"
   yum install nodejs -y &>>${log}
-  if [ $? -eq 0 ]; then
-    echo -e "\e[32m SUCCESS \e[0m"
-  else
-     echo -e "\e[31m FAILURE \e[0m"
-  fi
+func_exit_status
   func_apppreq
-  if [ $? -eq 0 ]; then
-    echo -e "\e[32m SUCCESS \e[0m"
-  else
-     echo -e "\e[31m FAILURE \e[0m"
-  fi
+func_exit_status
   echo -e "\e[36m>>>>>>>Download NodeJs Dependencies<<<<<<<<<<\e[0m"
 
   npm install &>>${log}
-  if [ $? -eq 0 ]; then
-    echo -e "\e[32m SUCCESS \e[0m"
-  else
-     echo -e "\e[31m FAILURE \e[0m"
-  fi
+   "\e[31m FAILURE \e[0m"
+func_exit_status
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
-if [ $? -eq 0 ]; then
-      echo -e "\e[32m SUCCESS \e[0m"
-    else
-       echo -e "\e[31m FAILURE \e[0m"
-    fi
+func_exit_status
   func_schema_setup
 
   func_systemd
