@@ -77,7 +77,7 @@ func_schema_setup () {
    yum install mongodb-org-shell -y &>>${log}
    if [$? -e0]; then
  
- echo -e "\e[32m success \e[0m"
+
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
