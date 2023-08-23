@@ -32,7 +32,7 @@ func_apppreq() {
     cd /app
     unzip /tmp/${component}.zip &>>${log}
     cd /app
-  func_exit_status
+    func_exit_status
 }
 
 func_systemd () {
