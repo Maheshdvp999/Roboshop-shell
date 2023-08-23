@@ -3,12 +3,16 @@ log=/tmp/roboshop.log
 func_apppreq() {
     echo -e "\e[36m>>>>>>>Create ${component} service <<<<<<<<<<\e[0m"
     cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
+    echo $?
     echo -e "\e[36m>>>>>>> ADD Roboshop ${component}<<<<<<<<<<\e[0m"
     useradd roboshop &>>${log}
+    echo $?
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
+    echo $?
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
+    echo $?
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
     curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
@@ -16,17 +20,20 @@ func_apppreq() {
     cd /app
     unzip /tmp/${component}.zip &>>${log}
     cd /app
+    echo $?
 
   }
 func_systemd () {
   systemctl daemon-reload &>>${log}
   systemctl enable ${component} &>>${log}
   systemctl restart ${component} &>>${log}
+  echo $?
 }
 func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
+  echo $?
 
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
   echo $?
@@ -76,15 +83,19 @@ func_schema_setup () {
  if [ "${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
    yum install mongodb-org-shell -y &>>${log}
+   echo $?
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
+   echo $?
  fi
 
  if [ "${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
+   echo $?
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
    mysql -h mysql.devops999.store -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>${log}
+   echo $?
 
  fi
 }
