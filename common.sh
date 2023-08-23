@@ -80,7 +80,7 @@ func_schema_setup () {
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
  fi
 
- if ["${schema_type}" == "mysql" ]; then
+ if [ "${schema_type}" == "mysql" ]; then
    echo -e "\e[36m>>>>>>>Install MySQL Client <<<<<<<<<<\e[0m"
    yum install mysql -y &>>${log}
    echo -e "\e[36m>>>>>>>Install Load Schema <<<<<<<<<<\e[0m"
