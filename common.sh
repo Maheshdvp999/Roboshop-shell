@@ -16,11 +16,7 @@ func_apppreq() {
     if [ $? -ne 0]; then
       useradd roboshop
     useradd roboshop &>>${log}
-    if [ $? -eq 0 ]; then
-          echo -e "\e[32m SUCCESS \e[0m"
-        else
-           echo -e "\e[31m FAILURE \e[0m"
-        fi
+    func_exit_status
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
   func_exit_status
@@ -37,7 +33,8 @@ func_apppreq() {
     unzip /tmp/${component}.zip &>>${log}
     cd /app
   func_exit_status
-  }
+}
+
 func_systemd () {
   systemctl daemon-reload &>>${log}
   systemctl enable ${component} &>>${log}
