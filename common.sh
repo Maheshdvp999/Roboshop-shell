@@ -19,14 +19,14 @@ func_apppreq() {
     func_exit_status
     echo -e "\e[36m>>>>>>>Clean up Applicationcontent<<<<<<<<<<\e[0m"
     rm -rf /app &>>${log}
-  func_exit_status
+    func_exit_status
     echo -e "\e[36m>>>>>>>Create  Application Directory<<<<<<<<<<\e[0m"
     mkdir /app &>>${log}
 
-  func_exit_status
+    func_exit_status
     echo -e "\e[36m>>>>>>>Download Application content<<<<<<<<<<\e[0m"
     curl -o /tmp/${component}.zip https://roboshop-artifacts.s3.amazonaws.com/${component}.zip &>>${log}
-  func_exit_status
+    func_exit_status
     echo -e "\e[36m>>>>>>>Extract Application content<<<<<<<<<<\e[0m"
 
     cd /app
@@ -46,25 +46,25 @@ func_nodejs () {
   log=/tmp/roboshop.log
   echo -e "\e[36m>>>>>>>Create  ${component} service file<<<<<<<<<<\e[0m"
   cp ${component}.service /etc/systemd/system/${component}.service &>>${log}
-func_exit_status
+  func_exit_status
 
   cp mongo.repo /etc/yum.repos.d/mongo.repo &>>${log}
-func_exit_status
+  func_exit_status
   echo -e "\e[36m>>>>>>>Create  Node Js Repos<<<<<<<<<<\e[0m"
   curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>${log}
-func_exit_status
+  func_exit_status
   echo -e "\e[36m>>>>>>>Install Node js<<<<<<<<<<\e[0m"
   yum install nodejs -y &>>${log}
-func_exit_status
+  func_exit_status
   func_apppreq
-func_exit_status
+  func_exit_status
   echo -e "\e[36m>>>>>>>Download NodeJs Dependencies<<<<<<<<<<\e[0m"
 
   npm install &>>${log}
    "\e[31m FAILURE \e[0m"
-func_exit_status
+  func_exit_status
   echo -e "\e[36m>>>>>>>Install Mongodb Client<<<<<<<<<<\e[0m"
-func_exit_status
+  func_exit_status
   func_schema_setup
 
   func_systemd
@@ -97,10 +97,10 @@ func_schema_setup () {
  if [ "${schema_type}" == "mongodb" ]; then
    echo -e "\e[36m>>>>>>>Install Mongo Client <<<<<<<<<<\e[0m"
    yum install mongodb-org-shell -y &>>${log}
-   echo $?
+   func_exit_status
    echo -e "\e[36m>>>>>>>Load user schema<<<<<<<<<<\e[0m"
    mongo --host mongodb.devops999.store </app/schema/${component}.js &>>${log}
-   echo $?
+   func_exit_status
  fi
 
  if [ "${schema_type}" == "mysql" ]; then
