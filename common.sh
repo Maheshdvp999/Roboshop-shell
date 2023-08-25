@@ -34,7 +34,7 @@ func_apppreq() {
     func_exit_status
 }
 
-func_systemd () {
+func_systemd() {
   systemctl daemon-reload &>>${log}
   systemctl enable ${component} &>>${log}
   systemctl restart ${component} &>>${log}
